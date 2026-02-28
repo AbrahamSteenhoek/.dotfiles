@@ -64,9 +64,6 @@ export PATH="$HOME/tools:$PATH"
 ## vi motions in cli
 set -o vi
 
-## fzf
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
 ## venv
 show_virtual_env() {
   if [ -n "$VIRTUAL_ENV" ]; then
@@ -84,4 +81,11 @@ fi
 if [ -e $HOME/.inputrc ]; then
     source $HOME/.inputrc
 fi
+
+
+### neovim
+export PATH=$PATH:/opt/neovim/v0.12.0-dev-2435+g18c5f06c9f/bin
+
+### fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
