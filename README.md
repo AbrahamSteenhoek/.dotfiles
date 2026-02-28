@@ -4,6 +4,7 @@
 Linux
 ```
 sudo apt-get install stow
+sudo apt-get install ripgrep ## nvim treesitter
 ```
 
 ## Usage
