@@ -142,14 +142,18 @@ vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })
 vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
-vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect in visual mode" })
-vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect in visual mode" })
+--vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect in visual mode" })
+--vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect in visual mode" })
 
 vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines and key cursor at same position" })
 vim.keymap.set("n", "Wq", "wq", { desc = "excuse my fat fingering when save-quitting" })
 vim.keymap.set("n", "Q", "<Nop>", { desc = "I'm afraid of Ex mode" })
 
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Open netrw filetree" })
+
+vim.keymap.set('n', '<C-/>', 'gcc', { remap = true, desc = 'Toggle comment' })
+vim.keymap.set('v', '<C-/>', 'gc',  { remap = true, desc = 'Toggle comment' })
+
 
 
 ----------------------------------------------------------------
