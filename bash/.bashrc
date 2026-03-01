@@ -89,3 +89,8 @@ export PATH=$PATH:/opt/neovim/v0.12.0-dev-2435+g18c5f06c9f/bin
 ### fzf
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+### node/npm
+export PATH=$PATH:/opt/node/v24.14.0/bin
+
+### tmux
+export PATH=$PATH:/opt/tmux/3.6a/bin
