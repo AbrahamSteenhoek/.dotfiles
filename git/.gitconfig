@@ -1,0 +1,15 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+name = Abraham Steenhoek
+email = ajsteenhoek@gmail.com
+[core]
+	editor = nvim
+[diff]
+	tool = nvimdiff
+[merge]
+	tool = nvimdiff
+[difftool]
+	prompt = false
+[mergetool]
+	prompt = false
