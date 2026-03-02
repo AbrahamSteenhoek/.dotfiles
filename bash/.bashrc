@@ -82,15 +82,12 @@ if [ -e $HOME/.inputrc ]; then
     source $HOME/.inputrc
 fi
 
+### node ####################################################
+export PATH="/home/abram/tools/node/v25.7.0/bin:$PATH"
+### neovim ##################################################
+export PATH="/home/abram/tools/nvim/v0.12.0-dev-2459+g62135f5a57/bin:$PATH"
+### fzf (junegun) ###########################################
+export PATH="/home/abram/tools/fzf/v0.68.0/bin:$PATH"
+source "/home/abram/tools/fzf/v0.68.0/shell/completion.bash"
+source "/home/abram/tools/fzf/v0.68.0/shell/key-bindings.bash"
 
-### neovim
-export PATH=$PATH:/opt/neovim/v0.12.0-dev-2435+g18c5f06c9f/bin
-
-### fzf
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-### node/npm
-export PATH=$PATH:/opt/node/v24.14.0/bin
-
-### tmux
-export PATH=$PATH:/opt/tmux/3.6a/bin
