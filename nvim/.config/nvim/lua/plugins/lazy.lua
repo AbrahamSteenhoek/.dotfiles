@@ -20,29 +20,57 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim plugins
 require("lazy").setup({
-  spec = {
-    {   'nvim-telescope/telescope.nvim', version = '*',
+    spec = {
+    {
+        'nvim-telescope/telescope.nvim', version = '*',
         dependencies = { -- requires `ripgrep` to be installed on local machine for `grep_files`
             'nvim-lua/plenary.nvim',
             -- optional but recommended
-            { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+            {
+                'nvim-telescope/telescope-fzf-native.nvim',
+                build = 'make'
+            },
         }
     },
-    {   'nvim-treesitter/nvim-treesitter',
+    {
+        'nvim-treesitter/nvim-treesitter',
         lazy = false,
         build = ':TSUpdate'
     },
     {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = { "nvim-lua/plenary.nvim" }
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        dependencies = { "nvim-lua/plenary.nvim" }
     },
+    {
+        "folke/snacks.nvim",
+        priority = 1000,
+        lazy = false,
+        ---@type snacks.Config
+        opts = {
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+            bigfile = { enabled = true },
+            dashboard = { enabled = true },
+            explorer = { enabled = true },
+            indent = { enabled = true },
+            input = { enabled = true },
+            picker = { enabled = true },
+            notifier = { enabled = true },
+            quickfile = { enabled = true },
+            scope = { enabled = true },
+            scroll = { enabled = true },
+            statuscolumn = { enabled = true },
+            words = { enabled = true },
+        },
+    }
     -- add more plugins here
-  },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "habamax" } },
-  -- automatically check for plugin updates
-  checker = { enabled = false }, -- run `:Lazy update` manually to check for new plugins
+},
+-- Configure any other settings here. See the documentation for more details.
+-- colorscheme that will be used when installing plugins.
+install = { colorscheme = { "habamax" } },
+-- automatically check for plugin updates
+checker = { enabled = false }, -- run `:Lazy update` manually to check for new plugins
 })
 
