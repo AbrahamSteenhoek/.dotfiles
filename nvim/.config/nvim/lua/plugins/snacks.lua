@@ -1,13 +1,25 @@
 -- Snacks.nvim configuration
 require("snacks").setup({
+    icons = { enabled = false }, -- Disables all icons globally
     bigfile = { enabled = true }, -- handles opening large files efficiently
-    dashboard = { enabled = true }, -- a customizable start screen
+    dashboard = { enabled = false }, -- a customizable start screen
     explorer = { enabled = true }, -- a built-in file explorer
     indent = { enabled = true }, -- subtle indentation guides
     input = { enabled = true }, -- improved UI for text input
     picker = { -- powerful search and selection tool (telescope alternative)
         enabled = true,
+        icons = {
+            files = { enabled = false }, -- Disables file icons in all pickers
+        },
         sources = {
+            -- Configure explorer to show hidden files and disable icons
+            explorer = {
+                hidden = true, -- show hidden files
+                ignored = true, -- show git-ignored files
+                icons = {
+                    enabled = false, -- Disables all icons in the explorer specifically
+                },
+            },
             -- Configure grep to behave like your telescope setup
             grep = {
                 hidden = true, -- show hidden files (dotfiles)
@@ -33,7 +45,7 @@ local snacks = require("snacks")
 
 -- 1. Explorer (File Tree)
 -- This replaces netrw and provides a modern file tree interface
-vim.keymap.set("n", "<leader>pv", function() snacks.explorer() end, { desc = "Project View (Explorer)" })
+vim.keymap.set("n", "<leader>pv", function() snacks.picker.explorer() end, { desc = "Project View (Resume)" })
 
 -- 2. Picker (Fuzzy Finder)
 -- Powerful alternatives to standard telescope commands
@@ -58,9 +70,11 @@ vim.keymap.set("n", "<leader>sb", function() snacks.picker.buffers() end, { desc
 vim.keymap.set("n", "<leader>sh", function() snacks.picker.help() end, { desc = "Search Help" })
 vim.keymap.set("n", "<leader>sd", function() snacks.picker.diagnostics() end, { desc = "Search Diagnostics" })
 
--- 3. Notifier (History)
+-- 3. Notifier (History & Logs)
 -- View your notification history in a floating window
 vim.keymap.set("n", "<leader>un", function() snacks.notifier.show_history() end, { desc = "Show Notification History" })
+-- Search through notification logs using the picker
+vim.keymap.set("n", "<leader>fn", function() snacks.picker.notifications() end, { desc = "Find Notifications (Log)" })
 
 -- 4. Indent & Scope
 -- These are mostly passive, but you can toggle them if needed
