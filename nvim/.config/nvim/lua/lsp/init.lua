@@ -60,8 +60,13 @@ vim.lsp.enable('verible')
 vim.lsp.enable('clangd')
 
 -- CMake
-vim.lsp.enable('cmake')
+vim.lsp.config('neocmake', {
+  cmd = { 'neocmakelsp', 'stdio' },
+})
 vim.lsp.enable('neocmake')
 
--- Makefile
-vim.lsp.enable('makefile-language-server')
+-- Python
+vim.lsp.enable('pyright')
+
+-- Makefile (Autotools)
+vim.lsp.enable('autotools_ls')

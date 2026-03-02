@@ -74,7 +74,7 @@ require("lazy").setup({
         config = function()
             require("mason").setup()
             require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "verible", "clangd", "neocmake", "cmake", "cmake-language-server", "makefile-language-server" },
+                ensure_installed = { "lua_ls", "verible", "clangd", "neocmake", "pyright", "autotools_ls" },
             })
         end,
     }
