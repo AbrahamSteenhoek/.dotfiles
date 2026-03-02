@@ -254,6 +254,11 @@ install_uv() {
 
 install_uv_python() {
     echo_info "Installing Python $PYTHON_VERSION using uv..."
+    
+    # Set UV_CACHE_DIR to be within the tools directory to avoid filling up HOME
+    export UV_CACHE_DIR="$INSTALL_DIR/uv/cache"
+    mkdir -p "$UV_CACHE_DIR"
+
     local uv_bin="$UV_FINAL_DIR/uv"
     local uvx_bin="$UV_FINAL_DIR/uvx"
 
@@ -325,6 +330,7 @@ echo "source \"$FZF_FINAL_DIR/shell/completion.bash\""
 echo "source \"$FZF_FINAL_DIR/shell/key-bindings.bash\""
 
 echo "### uv ######################################################"
+echo "export UV_CACHE_DIR=\"$INSTALL_DIR/uv/cache\""
 echo "export PATH=\"$UV_FINAL_DIR:\$PATH\""
 
 echo "### python (uv managed) #####################################"
