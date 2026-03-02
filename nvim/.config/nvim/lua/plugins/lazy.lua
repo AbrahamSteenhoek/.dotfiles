@@ -22,17 +22,6 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     spec = {
     {
-        'nvim-telescope/telescope.nvim', version = '*',
-        dependencies = { -- requires `ripgrep` to be installed on local machine for `grep_files`
-            'nvim-lua/plenary.nvim',
-            -- optional but recommended
-            {
-                'nvim-telescope/telescope-fzf-native.nvim',
-                build = 'make'
-            },
-        }
-    },
-    {
         'nvim-treesitter/nvim-treesitter',
         lazy = false,
         build = ':TSUpdate'
