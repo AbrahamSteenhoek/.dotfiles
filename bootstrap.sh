@@ -6,6 +6,8 @@ set -e
 INSTALL_DIR="$HOME/tools"
 NODE_VERSION="v25.7.0"
 FZF_VERSION="v0.68.0"
+UV_VERSION="0.10.7"
+PYTHON_VERSION="3.13"
 # Neovim Nightly (requested: v0.12.0-dev-2459+g62135f5a57)
 NVIM_VERSION="nightly" 
 
@@ -209,6 +211,88 @@ install_nvim() {
     rm -rf "$tmp_dir"
 }
 
+install_uv() {
+    local arch=$(uname -m)
+    case $arch in
+        x86_64) arch="x86_64" ;;
+        aarch64) arch="aarch64" ;;
+    esac
+    local tarball="uv-$arch-unknown-linux-gnu.tar.gz"
+    local url="https://github.com/astral-sh/uv/releases/download/$UV_VERSION/$tarball"
+
+    echo_info "Downloading uv $UV_VERSION to determine exact version..."
+    local tmp_dir=$(mktemp -d)
+    if ! curl -fSL "$url" -o "$tmp_dir/$tarball"; then
+        echo_error "Failed to download uv from $url"
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+
+    mkdir -p "$tmp_dir/extracted"
+    tar -xzf "$tmp_dir/$tarball" -C "$tmp_dir/extracted" --strip-components=1
+
+    local version=$("$tmp_dir/extracted/uv" --version | awk '{print $2}')
+    if [[ -z "$version" ]]; then
+        echo_error "Could not determine uv version."
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+
+    UV_FINAL_DIR="$INSTALL_DIR/uv/$version"
+
+    if [ -d "$UV_FINAL_DIR" ]; then
+        echo_info "uv $version is already installed at $UV_FINAL_DIR."
+        rm -rf "$tmp_dir"
+        return 0
+    fi
+
+    echo_info "Installing uv $version to $UV_FINAL_DIR..."
+    mkdir -p "$(dirname "$UV_FINAL_DIR")"
+    mv "$tmp_dir/extracted" "$UV_FINAL_DIR"
+    rm -rf "$tmp_dir"
+}
+
+install_uv_python() {
+    echo_info "Installing Python $PYTHON_VERSION using uv..."
+    local uv_bin="$UV_FINAL_DIR/uv"
+    local uvx_bin="$UV_FINAL_DIR/uvx"
+
+    # Use uv to fetch the specific python version
+    "$uv_bin" python install "$PYTHON_VERSION"
+
+    # Get the actual path where uv installed python
+    local uv_python_path=$("$uv_bin" python find "$PYTHON_VERSION")
+    local python_root=$(dirname "$(dirname "$uv_python_path")")
+
+    echo_info "Patching Python $PYTHON_VERSION sysconfig with sysconfigpatcher..."
+    "$uvx_bin" --from "git+https://github.com/bluss/sysconfigpatcher" sysconfigpatcher "$python_root"
+
+    local actual_version=$("$uv_python_path" --version | awk '{print $2}')
+    
+    PYTHON_FINAL_DIR="$UV_FINAL_DIR/python/$actual_version"
+
+    if [ -d "$PYTHON_FINAL_DIR" ]; then
+        echo_info "Python $actual_version is already set up at $PYTHON_FINAL_DIR."
+        return 0
+    fi
+
+    echo_info "Setting up Python $actual_version in $PYTHON_FINAL_DIR..."
+    mkdir -p "$PYTHON_FINAL_DIR"
+    
+    # We'll create a symlink to the uv-managed python for convenience in our tools dir
+    ln -sf "$uv_python_path" "$PYTHON_FINAL_DIR/python3"
+    ln -sf "$uv_python_path" "$PYTHON_FINAL_DIR/python"
+    
+    # Also link the bin directory of the python installation if possible
+    local python_bin_dir=$(dirname "$uv_python_path")
+    for bin in "$python_bin_dir"/*; do
+        local bname=$(basename "$bin")
+        if [ ! -f "$PYTHON_FINAL_DIR/$bname" ]; then
+            ln -sf "$bin" "$PYTHON_FINAL_DIR/$bname"
+        fi
+    done
+}
+
 # --- Main Flow ---
 
 parse_args "$@"
@@ -224,6 +308,8 @@ check_dependencies
 install_node
 install_fzf
 install_nvim
+install_uv
+install_uv_python
 
 echo -e "\n${GREEN}Bootstrap complete!${NC}"
 echo "Tools installed in: $INSTALL_DIR. To use these tools, add them to your PATH (e.g., in ~/.bashrc)"
@@ -237,3 +323,9 @@ echo "### fzf (junegun) ###########################################"
 echo "export PATH=\"$FZF_FINAL_DIR/bin:\$PATH\""
 echo "source \"$FZF_FINAL_DIR/shell/completion.bash\""
 echo "source \"$FZF_FINAL_DIR/shell/key-bindings.bash\""
+
+echo "### uv ######################################################"
+echo "export PATH=\"$UV_FINAL_DIR:\$PATH\""
+
+echo "### python (uv managed) #####################################"
+echo "export PATH=\"$PYTHON_FINAL_DIR:\$PATH\""
