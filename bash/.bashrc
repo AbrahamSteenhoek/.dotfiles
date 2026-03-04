@@ -13,6 +13,9 @@ shopt -s histappend
 # match all files and zero or more directories and subdirectories.
 shopt -s globstar
 
+# Silence the bell
+bind 'set bell-style none'
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -82,23 +85,12 @@ if [ -e $HOME/.inputrc ]; then
     source $HOME/.inputrc
 fi
 
-### node ####################################################
-export NPM_CONFIG_CACHE="/home/abram/tools/node/npm-cache"
-export NPM_CONFIG_USERCONFIG="/home/abram/tools/node/npm-config/.npmrc"
-export PATH="/home/abram/tools/node/v25.7.0/bin:$PATH"
-### neovim ##################################################
-export XDG_DATA_HOME="/home/abram/tools/nvim/data"
-export XDG_STATE_HOME="/home/abram/tools/nvim/state"
-export XDG_CACHE_HOME="/home/abram/tools/nvim/cache"
-export PATH="/home/abram/tools/nvim/v0.12.0-dev-2462+g1a02896e16/bin:$PATH"
-### fzf (junegun) ###########################################
-export PATH="/home/abram/tools/fzf/v0.68.0/bin:$PATH"
-source "/home/abram/tools/fzf/v0.68.0/shell/completion.bash"
-source "/home/abram/tools/fzf/v0.68.0/shell/key-bindings.bash"
-### uv ######################################################
-export UV_CACHE_DIR="/home/abram/tools/uv/0.10.7/cache"
-export UV_PYTHON_INSTALL_DIR="/home/abram/tools/uv/0.10.7/python"
-export PATH="/home/abram/tools/uv/0.10.7:$PATH"
-### python (uv managed) #####################################
-export PATH="/home/abram/tools/uv/0.10.7/python/cpython-3.13-linux-x86_64-gnu/bin:$PATH"
+## bootstrap tool installs
+if [ -f ~/.bash_bootstrap_installs ]; then
+    source ~/.bash_bootstrap_installs
+fi
+
+### verilator ###############################################
+export VERILATOR_ROOT="/opt/verilator/v5.044"
+export PATH="$VERILATOR_ROOT/bin":$PATH
 
