@@ -40,8 +40,8 @@ check_dependencies() {
         "pkg-config"
         "bison"
         "xz"
-        "ca-certificates"
-        "gnupg"
+        #"ca-certificates"
+        #"gnupg"
     )
     for dep in "${deps[@]}"; do
         if ! command -v "$dep" &> /dev/null; then
