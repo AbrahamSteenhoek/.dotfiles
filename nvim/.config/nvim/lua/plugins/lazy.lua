@@ -45,12 +45,6 @@ require("lazy").setup({
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
         },
-        config = function()
-            require("mason").setup()
-            require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "verible", "clangd", "neocmake", "pyright", "autotools_ls" },
-            })
-        end,
     }
     -- add more plugins here
 },

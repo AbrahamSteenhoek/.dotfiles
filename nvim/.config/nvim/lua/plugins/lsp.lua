@@ -1,5 +1,10 @@
 -- Neovim 0.12+ Modern LSP Configuration
 
+require("mason").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = { "lua_ls", "verible", "clangd", "neocmake", "pyright", "autotools_ls" },
+})
+
 -- 1. Global settings for all LSP servers
 vim.lsp.config('*', {
   -- Native completion (0.12+)
