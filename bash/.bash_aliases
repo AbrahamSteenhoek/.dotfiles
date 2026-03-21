@@ -24,3 +24,6 @@ fi
 
 alias gs='git status'
 alias ga='git add'
+
+# Audio
+alias restartaudio='systemctl --user restart pipewire pipewire-pulse wireplumber'
