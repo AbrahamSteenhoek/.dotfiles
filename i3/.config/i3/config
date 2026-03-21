@@ -49,7 +49,13 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+p exec --no-startup-id dmenu_run
+# Launch Rofi (App Launcher)
+bindsym $mod+p exec --no-startup-id rofi -show drun
+# Launch Rofi (Audio Switcer)
+bindsym $mod+Shift+a exec --no-startup-id ~/.config/i3/scripts/audio_switcher.sh
+# Launch Rofi (Process Killer)
+bindsym $mod+Shift+k exec --no-startup-id ~/.config/i3/scripts/process_killer.sh
+bindsym $mod+space exec rofi -show combi
 
 # split orientation
 bindsym $mod+b split h
@@ -74,10 +80,10 @@ bindsym $mod+Ctrl+Down split v; exec i3-sensible-terminal
 bindsym $mod+Ctrl+Up split v; exec i3-sensible-terminal
 
 # move focused window
-bindsym $mod+Shift+j move left
-bindsym $mod+Shift+k move down
-bindsym $mod+Shift+l move up
-bindsym $mod+Shift+semicolon move right
+#bindsym $mod+Shift+h move left
+#bindsym $mod+Shift+j move down
+#bindsym $mod+Shift+k move up
+#bindsym $mod+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -97,7 +103,7 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+#bindsym $mod+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -189,8 +195,8 @@ exec --no-startup-id libinput-gestures-setup start
 
 # Gaps (spacing between windows)
 # Inner gaps: space between adjacent windows
-gaps inner 8
-gaps outer 4
+gaps inner 4
+gaps outer 2
 # Outer gaps: space at the screen edges (separate horizontal/vertical possible)
 #gaps horizontal 4
 #gaps vertical 4
