@@ -6,9 +6,9 @@ configuration {
     location: 0;
     disable-history: false;
     hide-scrollbar: true;
-    display-drun: "   Apps ";
-    display-run: "   Run ";
-    display-window: " 󰕰  Window ";
+    display-drun: " Apps ";
+    display-run: " Run ";
+    display-window: " Window ";
     sidebar-mode: true;
 }
 
@@ -25,7 +25,7 @@ configuration {
     grey: #6272a4;
 
     width: 600;
-    font: "JetBrainsMono Nerd Font 12";
+    font: "monospace 12";
 }
 
 element-text, mode-switcher {
