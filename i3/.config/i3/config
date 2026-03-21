@@ -177,7 +177,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Start Polybar
-exec_always --no-startup-id killall -q polybar; polybar main &
+exec_always --no-startup-id ~/.config/polybar/launch.sh
 
 # i3bar disabled (using polybar instead)
 # bar {
