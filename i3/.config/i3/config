@@ -11,9 +11,26 @@
 
 set $mod Mod4
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-font pango:monospace 8
+# Font for window titles.
+font pango:monospace 10
+
+# Window border and titlebar configuration
+default_border pixel 2
+default_floating_border pixel 2
+smart_borders on
+smart_gaps on
+gaps inner 10
+gaps outer 0
+
+# Dracula Color Scheme
+# class                 border  backgr. text    indicator child_border
+client.focused          #bd93f9 #bd93f9 #282a36 #ff79c6   #bd93f9
+client.focused_inactive #44475a #44475a #f8f8f2 #44475a   #44475a
+client.unfocused        #282a36 #282a36 #bfbfbf #282a36   #282a36
+client.urgent           #ff5555 #ff5555 #f8f8f2 #ff5555   #ff5555
+client.placeholder      #282a36 #282a36 #f8f8f2 #282a36   #282a36
+client.background       #282a36
+
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -54,7 +71,7 @@ bindsym $mod+p exec --no-startup-id rofi -show drun
 # Launch Rofi (Audio Switcer)
 bindsym $mod+Shift+a exec --no-startup-id ~/.config/i3/scripts/audio_switcher.sh
 # Launch Rofi (Process Killer)
-bindsym $mod+Shift+k exec --no-startup-id ~/.config/i3/scripts/process_killer.sh
+bindsym $mod+Shift+x exec --no-startup-id ~/.config/i3/scripts/process_killer.sh
 bindsym $mod+space exec rofi -show combi
 
 # split orientation

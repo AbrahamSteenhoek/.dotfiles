@@ -10,7 +10,7 @@ processes=$(ps aux --sort=-%cpu | head -n 16 | awk 'NR>1 {printf "%-7s | %-5s | 
 
 # Pass the list to rofi
 # Header explains the columns
-selected=$(echo -e "$processes" | rofi -dmenu -i -p "󰆚 Kill Process" -mesg "PID     | CPU   | MEM   | COMMAND" -theme-str 'window { width: 60%; } listview { lines: 15; }' -font "JetBrainsMono Nerd Font 10")
+selected=$(echo -e "$processes" | rofi -dmenu -i -p "Kill Process" -mesg "PID     | CPU   | MEM   | COMMAND" -theme-str 'window { width: 60%; } listview { lines: 15; }' -font "monospace 10")
 
 # If the user made a selection
 if [ -n "$selected" ]; then
@@ -22,9 +22,9 @@ if [ -n "$selected" ]; then
     
     # Kill the process
     if kill "$pid"; then
-        dunstify -u critical -a "System" -i process-stop "Process Killed" "Terminated $name (PID: $pid)" -t 2000
+        dunstify -u critical -a "System" "Process Killed" "Terminated $name (PID: $pid)" -t 2000
     else
         # If standard kill fails, offer a warning
-        dunstify -u critical -a "System" -i dialog-error "Failed to Kill" "Could not terminate $name (PID: $pid)" -t 2000
+        dunstify -u critical -a "System" "Failed to Kill" "Could not terminate $name (PID: $pid)" -t 2000
     fi
 fi

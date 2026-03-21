@@ -31,7 +31,7 @@ while IFS= read -r line; do
 done <<< "$all_sinks"
 
 # Pass the list to rofi
-selected=$(echo -e "$final_list" | rofi -dmenu -i -p "󰓃 Audio Output" -theme-str 'window { width: 50%; } listview { lines: 10; }')
+selected=$(echo -e "$final_list" | rofi -dmenu -i -p "Audio Output" -theme-str 'window { width: 50%; } listview { lines: 10; }')
 
 # If the user made a selection
 if [ -n "$selected" ]; then
@@ -43,5 +43,5 @@ if [ -n "$selected" ]; then
     
     # Send a notification
     device_name=$(echo "$selected" | sed 's/^[0-9.]*[[:space:]]*//; s/\[vol:.*//; s/\[SELECTED\]//')
-    dunstify -a "System" -i audio-speakers "Output Switched" "$device_name" -t 2000
+    dunstify -a "System" "Output Switched" "$device_name" -t 2000
 fi
