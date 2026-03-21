@@ -4,7 +4,6 @@
 inc_dec=5
 
 # Maximum volume allowed (1.0 = 100%, 1.5 = 150%, etc.)
-# Most systems consider 1.0 the "software 100%", but allow over-amplification.
 max_vol_limit=1.0
 
 # Function to get current volume as a float
@@ -21,7 +20,6 @@ current_vol=$(get_vol_float)
 
 case $1 in
     up)
-        # bc is not available, using awk for comparison and math
         new_vol=$(awk "BEGIN {print $current_vol + $inc_dec/100}")
         is_over=$(awk "BEGIN {print ($new_vol > $max_vol_limit)}")
         if [ "$is_over" -eq 1 ]; then
@@ -44,9 +42,7 @@ esac
 
 # Refresh volume after change
 current_vol=$(get_vol_float)
-# Calculate percentage for display (relative to 1.0)
 display_vol=$(awk "BEGIN {printf \"%.0f\", $current_vol * 100}")
-# Calculate progress bar value (normalized to 100 based on max_vol_limit)
 bar_val=$(awk "BEGIN {printf \"%.0f\", ($current_vol / $max_vol_limit) * 100}")
 
 # Icon logic
@@ -74,3 +70,6 @@ dunstify -h string:x-dunst-stack-tag:volume \
          "Volume: ${display_vol}%${muted}" \
          -a "VolumeController" \
          -t 1500
+
+# Signal i3status to update (non-blocking)
+killall -SIGUSR1 i3status 2>/dev/null &
