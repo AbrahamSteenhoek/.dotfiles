@@ -8,6 +8,7 @@ NODE_VERSION="v25.7.0"
 DOCKER_VERSION="27.3.1"
 FZF_VERSION="v0.68.0"
 UV_VERSION="0.10.7"
+SIOYEK_VERSION="v2.0.0"
 PYTHON_VERSION="3.13"
 # Neovim Nightly (requested: v0.12.0-dev-2459+g62135f5a57)
 NVIM_VERSION="nightly" 
@@ -259,6 +260,46 @@ install_uv() {
     rm -rf "$tmp_dir"
 }
 
+install_sioyek() {
+    SIOYEK_FINAL_DIR="$INSTALL_DIR/sioyek/$SIOYEK_VERSION"
+    if [ -d "$SIOYEK_FINAL_DIR" ]; then
+        echo_info "sioyek $SIOYEK_VERSION is already installed at $SIOYEK_FINAL_DIR."
+        return 0
+    fi
+
+    # https://github.com/ahrm/sioyek/releases/download/v2.0.0/sioyek-release-linux.zip
+    local url="https://github.com/ahrm/sioyek/releases/download/$SIOYEK_VERSION/sioyek-release-linux.zip"
+    
+    echo_info "Downloading sioyek $SIOYEK_VERSION..."
+    local tmp_dir=$(mktemp -d)
+    if ! curl -fSL "$url" -o "$tmp_dir/sioyek.zip"; then
+        echo_error "Failed to download sioyek from $url"
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+
+    echo_info "Extracting sioyek zip..."
+    unzip "$tmp_dir/sioyek.zip" -d "$tmp_dir/extracted"
+    
+    # The zip might contain the AppImage or the extracted contents.
+    # User said: "It is an appimage so it requires you to first unzip, then --appimage-extract"
+    local appimage=$(find "$tmp_dir/extracted" -name "*.AppImage" | head -n 1)
+    if [ -z "$appimage" ]; then
+        echo_error "Could not find AppImage in zip."
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+    chmod +x "$appimage"
+
+    echo_info "Extracting AppImage (to get the binary)..."
+    (cd "$tmp_dir" && "$appimage" --appimage-extract > /dev/null)
+
+    echo_info "Installing sioyek to $SIOYEK_FINAL_DIR..."
+    mkdir -p "$(dirname "$SIOYEK_FINAL_DIR")"
+    mv "$tmp_dir/squashfs-root" "$SIOYEK_FINAL_DIR"
+    rm -rf "$tmp_dir"
+}
+
 install_uv_python() {
     local uv_bin="$UV_FINAL_DIR/uv"
     local uvx_bin="$UV_FINAL_DIR/uvx"
@@ -307,6 +348,7 @@ install_fzf
 install_nvim
 install_uv
 install_uv_python
+install_sioyek
 
 # --- Generate Configuration File ---
 
@@ -345,6 +387,9 @@ echo_info "Generating configuration file: $CONFIG_FILE"
 
     echo "### python (uv managed) #####################################"
     echo "export PATH=\"$PYTHON_FINAL_DIR:\$PATH\""
+
+    echo "### sioyek ##################################################"
+    echo "export PATH=\"$SIOYEK_FINAL_DIR/usr/bin:\$PATH\""
 } > "$CONFIG_FILE"
 
 echo -e "\n${GREEN}Bootstrap complete!${NC}"
