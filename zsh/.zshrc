@@ -1,0 +1,59 @@
+# --- Shell Options ---
+# Basic completion system (standard for any usable Zsh)
+autoload -Uz compinit && compinit
+
+# History configuration
+HISTSIZE=1000
+SAVEHIST=2000
+HISTFILE=~/.zsh_history
+
+# Options
+setopt APPEND_HISTORY       # Append to history file
+setopt SHARE_HISTORY        # Share history between sessions
+setopt HIST_IGNORE_DUPS     # Don't record same line as previous
+setopt EXTENDED_GLOB        # Treat #, ~, and ^ as part of patterns
+
+# --- Vi Mode ---
+bindkey -v
+export KEYTIMEOUT=1         # Faster escape key response
+
+# --- Environment ---
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/lib:$PATH"
+export PATH="$HOME/tools:$PATH"
+
+# Verilator
+export VERILATOR_ROOT="/opt/verilator/v5.044"
+export PATH="$VERILATOR_ROOT/bin":$PATH
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# make less more friendly
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# --- Prompt ---
+# Enable parameter expansion in prompt
+setopt PROMPT_SUBST
+
+# Virtualenv display
+show_virtual_env() {
+  if [ -n "$VIRTUAL_ENV" ]; then
+    echo "($(basename $VIRTUAL_ENV))"
+  fi
+}
+
+# Colors: %F{color} ... %f
+# Bold: %B ... %b
+# %~ (Directory), %n (User), %m (Host)
+PROMPT='$(show_virtual_env)%F{blue}%B%~%b%f
+%F{green}%n%f@%F{green}%m%f > '
+
+# --- Aliases ---
+# Reusing bash aliases (compatible syntax)
+if [ -f ~/.bash_aliases ]; then
+    source ~/.bash_aliases
+fi
+
+# --- Program Installs ---
+# Placeholder: add Zsh-compatible bootstrap installs here later
