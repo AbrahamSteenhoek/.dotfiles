@@ -98,9 +98,11 @@ install_nvim() {
     mkdir -p "$tmp_dir/extracted"
     tar -xzf "$tmp_dir/$tarball" -C "$tmp_dir/extracted" --strip-components=1
     
-    NVIM_FINAL_DIR="$INSTALL_DIR/nvim/$NVIM_VERSION"
+    local version=$("$tmp_dir/extracted/bin/nvim" --version | head -n 1 | awk '{print $2}')
+    NVIM_FINAL_DIR="$INSTALL_DIR/nvim/$version"
+
     if [ -d "$NVIM_FINAL_DIR" ]; then
-        echo_info "Neovim is already installed."
+        echo_info "Neovim $version is already installed."
         rm -rf "$tmp_dir"
         return 0
     fi
