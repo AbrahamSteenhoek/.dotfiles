@@ -1,0 +1,19 @@
+# macOS Tool configuration (Version Pinned)
+eval "$(/opt/homebrew/bin/brew shellenv)"
+### node ###
+export PATH="/Users/hoeka/tools/node/v25.7.0/bin:$PATH"
+### nvim ###
+export XDG_DATA_HOME="/Users/hoeka/tools/nvim/data"
+export XDG_STATE_HOME="/Users/hoeka/tools/nvim/state"
+export XDG_CACHE_HOME="/Users/hoeka/tools/nvim/cache"
+export PATH="/Users/hoeka/tools/nvim/nightly/bin:$PATH"
+### fzf ###
+export PATH="/Users/hoeka/tools/fzf/v0.68.0/bin:$PATH"
+source "/Users/hoeka/tools/fzf/v0.68.0/shell/completion.zsh"
+source "/Users/hoeka/tools/fzf/v0.68.0/shell/key-bindings.zsh"
+### uv ###
+export UV_CACHE_DIR="/Users/hoeka/tools/uv/0.10.7/cache"
+export UV_PYTHON_INSTALL_DIR="/Users/hoeka/tools/uv/0.10.7/python"
+export PATH="/Users/hoeka/tools/uv/0.10.7:$PATH"
+### python ###
+export PATH="/Users/hoeka/tools/uv/0.10.7/python/cpython-3.13-macos-aarch64-none/bin:$PATH"

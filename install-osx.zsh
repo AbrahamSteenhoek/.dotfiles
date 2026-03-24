@@ -31,7 +31,7 @@ check_dependencies() {
     brew update
     brew install git stow ripgrep curl unzip
     # Casks for GUI apps
-    brew install --cask docker alacritty
+    brew install --cask alacritty
 }
 
 parse_args() {
