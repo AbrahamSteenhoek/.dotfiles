@@ -40,15 +40,6 @@ check_dependencies() {
             echo "✓ '$dep' found."
         fi
     done
-
-    if ! pkg-config --exists libevent; then
-        echo_error "'libevent' development files not found."
-        exit 1
-    fi
-    if ! pkg-config --exists ncurses; then
-        echo_error "'ncurses' development files not found."
-        exit 1
-    fi
 }
 
 parse_args() {
