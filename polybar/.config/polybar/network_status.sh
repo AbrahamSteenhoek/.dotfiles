@@ -11,18 +11,24 @@ if [ -n "$wifi_interface" ]; then
     fi
 fi
 
-# Get Wi-Fi SSID (try a few non-root methods)
+# Get Wi-Fi SSID
 wifi_name=""
 if [ "$wifi_status" = "up" ]; then
-    # Try iwgetid (if it works without sudo)
-    wifi_name=$(/usr/sbin/iwgetid -r "$wifi_interface" 2>/dev/null)
+    # Try iwctl (iwd)
+    if command -v iwctl >/dev/null 2>&1; then
+        wifi_name=$(iwctl station "$wifi_interface" show | grep "Connected network" | awk '{print $NF}')
+    fi
 
-    # If empty, try checking if it's connected in wpa_cli status (sometimes works as user)
+    # Fallback to iwgetid
+    if [ -z "$wifi_name" ]; then
+        wifi_name=$(/usr/sbin/iwgetid -r "$wifi_interface" 2>/dev/null)
+    fi
+
+    # Fallback to wpa_cli
     if [ -z "$wifi_name" ]; then
         wifi_name=$(/usr/sbin/wpa_cli status -i "$wifi_interface" 2>/dev/null | grep "^ssid=" | cut -d= -f2)
     fi
 fi
-
 # Get Ethernet interface name
 eth_interface=$(ls /sys/class/net | grep -E "^(enp|eno|eth)" | head -n 1)
 

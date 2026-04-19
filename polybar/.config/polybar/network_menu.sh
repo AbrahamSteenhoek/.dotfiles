@@ -6,21 +6,20 @@ dunstify -t 1000 "Network Menu" "Launching..."
 # Get the Wi-Fi interface
 wifi_interface=$(ls /sys/class/net | grep -E "^(wlp|wlan)" | head -n 1)
 
-
-# Function to run wpa_cli (NO SUDO NEEDED NOW)
-run_wpa() {
-    /usr/sbin/wpa_cli -i "$wifi_interface" "$@"
+# Function to run iwctl
+run_iwctl() {
+    iwctl "$@"
 }
 
 # Scan for networks
-run_wpa scan > /dev/null
-sleep 2
+run_iwctl station "$wifi_interface" scan
+sleep 1
 
 # Get scan results and format them
-scan_results=$(run_wpa scan_results | awk 'NR>2 {
-    ssid=""; for(i=5; i<=NF; i++) ssid=(ssid $i " ");
+scan_results=$(run_iwctl station "$wifi_interface" get-networks | awk 'NR>4 {
+    ssid=""; for(i=1; i<=NF-2; i++) ssid=(ssid $i " ");
     sub(/ $/, "", ssid);
-    if (ssid != "") print ssid " (" $3 " dBm)"
+    if (ssid != "") print ssid " (" $(NF-1) ")"
 }' | sort -u)
 
 if [ -z "$scan_results" ]; then
@@ -32,20 +31,17 @@ fi
 chosen_line=$(echo -e "$scan_results" | rofi -dmenu -i -p "Select Wifi" -theme-str 'window { width: 40%; } listview { lines: 15; }')
 
 if [ -n "$chosen_line" ]; then
-    chosen_ssid=$(echo "$chosen_line" | sed 's/ (.* dBm)$//')
+    chosen_ssid=$(echo "$chosen_line" | sed 's/ (.*)$//')
     
     # Get password using rofi
     password=$(rofi -dmenu -password -p "Password for $chosen_ssid" -theme-str 'window { width: 30%; } listview { lines: 0; }')
     
     if [ -n "$password" ]; then
-        # Add network and set credentials
-        net_id=$(run_wpa add_network | tail -n 1)
-        run_wpa set_network "$net_id" ssid "\"$chosen_ssid\""
-        run_wpa set_network "$net_id" psk "\"$password\""
-        run_wpa enable_network "$net_id"
-        run_wpa select_network "$net_id"
-        run_wpa save_config
-        
-        dunstify -a "Network" "Connecting to $chosen_ssid..." -t 5000
+        # Connect using iwctl
+        if iwctl station "$wifi_interface" connect "$chosen_ssid" --passphrase "$password"; then
+             dunstify -a "Network" "Connecting to $chosen_ssid..." -t 5000
+        else
+             dunstify -u critical "Network" "Failed to connect to $chosen_ssid"
+        fi
     fi
 fi
