@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# Debug notification
+dunstify -t 1000 "Network Menu" "Launching..."
+
 # Get the Wi-Fi interface
-wifi_interface=$(ls /sys/class/net | grep -E "^wlp" | head -n 1)
+wifi_interface=$(ls /sys/class/net | grep -E "^(wlp|wlan)" | head -n 1)
+
 
 # Function to run wpa_cli (NO SUDO NEEDED NOW)
 run_wpa() {

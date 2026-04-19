@@ -94,3 +94,4 @@ fi
 export VERILATOR_ROOT="/opt/verilator/v5.044"
 export PATH="$VERILATOR_ROOT/bin":$PATH
 
+. "$HOME/.cargo/env"

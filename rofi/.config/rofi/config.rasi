@@ -1,5 +1,6 @@
 configuration {
     modi: "drun,run,window";
+    combi-modi: "drun,run";
     show-icons: false;
     terminal: "i3-sensible-terminal";
     drun-display-format: "{name}";

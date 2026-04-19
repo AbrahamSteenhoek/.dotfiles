@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get Wi-Fi interface name
-wifi_interface=$(ls /sys/class/net | grep -E "^wlp" | head -n 1)
+wifi_interface=$(ls /sys/class/net | grep -E "^(wlp|wlan)" | head -n 1)
 
 # Get Wi-Fi status
 wifi_status="down"
@@ -16,15 +16,16 @@ wifi_name=""
 if [ "$wifi_status" = "up" ]; then
     # Try iwgetid (if it works without sudo)
     wifi_name=$(/usr/sbin/iwgetid -r "$wifi_interface" 2>/dev/null)
-    
+
     # If empty, try checking if it's connected in wpa_cli status (sometimes works as user)
     if [ -z "$wifi_name" ]; then
-        wifi_name=$(/usr/sbin/wpa_cli status 2>/dev/null | grep "^ssid=" | cut -d= -f2)
+        wifi_name=$(/usr/sbin/wpa_cli status -i "$wifi_interface" 2>/dev/null | grep "^ssid=" | cut -d= -f2)
     fi
 fi
 
 # Get Ethernet interface name
-eth_interface=$(ls /sys/class/net | grep -E "^enp" | head -n 1)
+eth_interface=$(ls /sys/class/net | grep -E "^(enp|eno|eth)" | head -n 1)
+
 
 # Get Ethernet status
 eth_status="down"

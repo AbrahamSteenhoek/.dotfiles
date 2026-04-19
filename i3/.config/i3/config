@@ -236,6 +236,10 @@ bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
 bindsym F7 exec --no-startup-id brightnessctl set +10%
 bindsym F6 exec --no-startup-id brightnessctl set 10%-
 
+# Floating windows
+for_window [class="floating_wiremix"] floating enable, resize set 800 600, move position center
+for_window [class="floating_impala"] floating enable, resize set 800 600, move position center
+
 # audio statusbar
 exec --no-startup-id pasystray
 
